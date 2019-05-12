@@ -1,0 +1,10 @@
+html
+  head
+    title MyApp
+  body(class=["myClass"])
+   h1(id="myid")=title
+      p 
+         h3 This is about
+         ul
+          each val in list
+           li(class=["item"])=val
