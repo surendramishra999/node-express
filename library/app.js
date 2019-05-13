@@ -38,12 +38,12 @@ app.use(
 );
 app.use(
   '/js',
-  express.static(path.join(__dirname, 'node_modules/jquery/dist/')),
+  express.static(path.join(__dirname, 'node_modules/jquery/dist')),
 );
 
 app.set('views', './src/views');
-app.set('view engine', 'pug');
-//app.set('view engine', 'ejs');
+//app.set('view engine', 'pug');
+app.set('view engine', 'ejs');
 app.get('/', (req, res) => {
   logger.debug(chalk.yellow('Debug statement'));
   logger.info(chalk.blue('Info statement'));
@@ -51,6 +51,12 @@ app.get('/', (req, res) => {
   res.render('index', {
     title: 'MY Articles',
     list: ['Math', 'Science', 'English', 'Hindi'],
+    imagePath: [
+      '/image/book.jpg',
+      '/image/book.jpg',
+      '/image/book.jpg',
+      '/image/book.jpg',
+    ],
   });
 });
 
