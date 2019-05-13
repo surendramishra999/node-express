@@ -14,6 +14,7 @@ module.exports = {
   rules: {
     'linebreak-style': 0,
     'global-require': 0,
+    'comma-dangle': 0,
     'eslint linebreak-style': [0, 'error', 'windows'],
   },
-}
+};

@@ -3,7 +3,13 @@ const chalk = require('chalk');
 const debug = require('debug')('app');
 const morgan = require('morgan');
 const path = require('path');
+const engine = require('ejs-mate');
 const logger = require('./logger');
+
+const nav = [
+  { title: 'Books', link: '/books' },
+  { title: 'Authors', link: '/authors' },
+];
 
 const app = express();
 
@@ -42,14 +48,23 @@ app.use(
 );
 
 app.set('views', './src/views');
-//app.set('view engine', 'pug');
+
+// app.set('view engine', 'pug');
+
+app.engine('ejs', engine);
 app.set('view engine', 'ejs');
+
+const bookRouter = require('./src/routes/bookRoutes')(nav);
+
+app.use('/books', bookRouter);
+
 app.get('/', (req, res) => {
   logger.debug(chalk.yellow('Debug statement'));
   logger.info(chalk.blue('Info statement'));
   // res.sendFile(path.join(__dirname, 'views/index.html'));
   res.render('index', {
     title: 'MY Articles',
+    nav,
     list: ['Math', 'Science', 'English', 'Hindi'],
     imagePath: [
       '/image/book.jpg',
