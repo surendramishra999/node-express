@@ -1,6 +1,6 @@
 <% layout('./column/1-column') -%>
 <div class="panel-body">
-  <% if(book){ %>
+  <% if(book && typeof book.id!='undefined'){ %>
   <div class="row">
     <br />
     <div class="col-md-2 col-sm-3 text-center">
@@ -23,7 +23,19 @@
             <span class="label label-default"><%=book.genre%></span>
           </h4>
         </div>
-        <div class="col-xs-3"></div>
+        <div class="col-xs-9"><%=book.discription %></div>
+      </div>
+      <br /><br />
+    </div>
+  </div>
+  <hr />
+  <% }else{ %>
+  <div class="row">
+    <br />
+    <div class="col-md-10 col-sm-9">
+      <h3>book not found</h3>
+      <div class="row">
+        <div class="col-xs-9">Link is broken.</div>
       </div>
       <br /><br />
     </div>

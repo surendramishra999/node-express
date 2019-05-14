@@ -1,42 +1,23 @@
 <% layout('./column/1-column') -%>
 <div class="panel-body">
-    <% for(let i=0; i<list.length ; i++){ %>
-       <div class="row">
-       <br />
-       <div class="col-md-2 col-sm-3 text-center">
-         <a class="story-title" href="#"
-           ><img
-             alt=""
-             src="<%=imagePath[i]%>"
-             style="width:100px;height:100px"
-             class="img-circle"
-         /></a>
-       </div>
-       <div class="col-md-10 col-sm-9">
-         <h3><%=list[i]%></h3>
-         <div class="row">
-           <div class="col-xs-9">
-             <h4>
-               <span class="label label-default"><%=list[i]%></span>
-             </h4>
-             <h4>
-               <small
-                 style="font-family:courier,'new courier';"
-                 class="text-muted"
-                 ><%=list[i]%> •
-                 <a href="#" class="text-muted">Read More</a></small
-               >
-             </h4>
-           </div>
-           <div class="col-xs-3"></div>
-         </div>
-         <br /><br />
-       </div>
-     </div>
-     <hr />
-     <% } %>
+  <div class="row">
+    <br />
+    <div class="col-md-10 col-sm-9">
+      <h3>Online Library</h3>
+      <div class="row">
+        <div class="col-xs-9">
+          <h4>
+            <span class="label label-default">start reading. Know more!</span>
+          </h4>
+        </div>
+        <div class="col-xs-3"></div>
+      </div>
+      <br /><br />
+    </div>
+  </div>
+  <hr />
 
-     <a href="/" class="btn btn-primary pull-right btnNext"
-       >More <i class="glyphicon glyphicon-chevron-right"></i
-     ></a>
-   </div>
+  <a href="/" class="btn btn-primary pull-right btnNext"
+    >More <i class="glyphicon glyphicon-chevron-right"></i
+  ></a>
+</div>
