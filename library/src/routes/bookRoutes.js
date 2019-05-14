@@ -2,62 +2,11 @@ const express = require('express');
 
 const bookRouter = express.Router();
 
-const books = [
-  {
-    title: 'War and Peace',
-    genre: 'Historical Friction',
-    author: 'John deo',
-    read: false,
-    img: '/image/book.jpg',
-  },
-  {
-    title: 'War and Peace',
-    genre: 'Historical Friction',
-    author: 'John deo',
-    read: false,
-    img: '/image/book.jpg',
-  },
-  {
-    title: 'War and Peace',
-    genre: 'Historical Friction',
-    author: 'John deo',
-    read: false,
-    img: '/image/book.jpg',
-  },
-  {
-    title: 'War and Peace',
-    genre: 'Historical Friction',
-    author: 'John deo',
-    read: false,
-    img: '/image/book.jpg',
-  },
-  {
-    title: 'War and Peace',
-    genre: 'Historical Friction',
-    author: 'John deo',
-    read: false,
-    img: '/image/book.jpg',
-  },
-  {
-    title: 'War and Peace',
-    genre: 'Historical Friction',
-    author: 'John deo',
-    read: false,
-    img: '/image/book.jpg',
-  },
-  {
-    title: 'War and Peace',
-    genre: 'Historical Friction',
-    author: 'John deo',
-    read: false,
-    img: '/image/book.jpg',
-  },
-];
-
-function router(nav) {
+function router(nav, books) {
+  console.info(books);
   bookRouter.route('/').get((req, res) => {
     res.render('bookListView', {
-      title: 'MY Articles',
+      title: 'All Books',
       nav,
       books,
     });
@@ -66,7 +15,7 @@ function router(nav) {
   bookRouter.route('/:id').get((req, res) => {
     const { id } = req.params;
     res.render('bookView', {
-      title: 'MY Articles',
+      title: books[id].title,
       nav,
       book: books[id],
     });

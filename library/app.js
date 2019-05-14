@@ -5,6 +5,7 @@ const morgan = require('morgan');
 const path = require('path');
 const engine = require('ejs-mate');
 const logger = require('./logger');
+const database = require('./database/mysql');
 
 const nav = [
   { title: 'Books', link: '/books' },
@@ -54,7 +55,32 @@ app.set('views', './src/views');
 app.engine('ejs', engine);
 app.set('view engine', 'ejs');
 
-const bookRouter = require('./src/routes/bookRoutes')(nav);
+const books = [];
+let connection;
+let bookRouter = require('./src/routes/bookRoutes')(nav, books);
+
+database()
+  .then(conn => {
+    connection = conn;
+    return connection.query('SELECT * FROM books');
+  })
+  .then(resultSet => {
+    connection.end();
+
+    if (resultSet) {
+      // eslint-disable-next-line no-restricted-syntax
+      for (const value of resultSet) {
+        books.push({ ...value });
+      }
+    }
+    console.info(books);
+    bookRouter = require('./src/routes/bookRoutes')(nav, books);
+    return bookRouter;
+  })
+  .catch(error => {
+    if (connection && connection.end) connection.end();
+    logger.debug(error);
+  });
 
 app.use('/books', bookRouter);
 
