@@ -62,12 +62,16 @@ const adminRouter = require('./src/routes/adminRoutes')(nav);
 
 app.use('/admin', adminRouter);
 
+const authorRouter = require('./src/routes/authorRoutes')(nav);
+
+app.use('/authors', authorRouter);
+
 app.get('/', (req, res) => {
   logger.debug(chalk.yellow('Debug statement'));
   logger.info(chalk.blue('Info statement'));
   // res.sendFile(path.join(__dirname, 'views/index.html'));
   res.render('index', {
-    title: 'MY Articles',
+    title: 'Library',
     nav,
   });
 });
