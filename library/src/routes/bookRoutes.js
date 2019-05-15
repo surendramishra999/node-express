@@ -37,35 +37,39 @@ function router(nav) {
       });
   });
 
-  bookRouter.route('/:id').get((req, res) => {
-    const { id } = req.params;
-    database()
-      .then(conn => {
-        connection = conn;
-        return connection.query(`SELECT * FROM books WHERE id=${id}`);
-      })
-      .then(resultSet => {
-        connection.end();
-        if (resultSet) {
-          book = { ...resultSet[0] };
-          res.render('bookView', {
-            title: book.title,
-            nav,
-            book,
-          });
-        }
-      })
-      .catch(error => {
-        if (connection && connection.end) connection.end();
-        /* eslint-disable no-console */
-        console.info(error);
-        res.render('bookView', {
-          title: book.title,
-          nav,
-          book,
+  bookRouter
+    .route('/:id')
+    .all((req, res, next) => {
+      const { id } = req.params;
+      database()
+        .then(conn => {
+          connection = conn;
+          return connection.query(`SELECT * FROM books WHERE id=${id}`);
+        })
+        .then(resultSet => {
+          connection.end();
+          if (resultSet) {
+            book = { ...resultSet[0] };
+          }
+          req.book = book;
+          next();
+          return book;
+        })
+        .catch(error => {
+          if (connection && connection.end) connection.end();
+          /* eslint-disable no-console */
+          console.info(error);
+          req.book = book;
+          next();
         });
+    })
+    .get((req, res) => {
+      res.render('bookView', {
+        title: book.title,
+        nav,
+        book: req.book,
       });
-  });
+    });
   return bookRouter;
 }
 
