@@ -58,6 +58,10 @@ const bookRouter = require('./src/routes/bookRoutes')(nav);
 
 app.use('/books', bookRouter);
 
+const adminRouter = require('./src/routes/adminRoutes')(nav);
+
+app.use('/admin', adminRouter);
+
 app.get('/', (req, res) => {
   logger.debug(chalk.yellow('Debug statement'));
   logger.info(chalk.blue('Info statement'));
