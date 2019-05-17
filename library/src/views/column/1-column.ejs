@@ -97,6 +97,9 @@
               <% const messages = getMessages(); if ( messages.notify) { %>
                 <div class="alert alert-danger"><%= messages.notify %> </div>
               <% } %>
+              <% if (error) { %>
+                <div class="alert alert-danger"><%= error %> </div>
+              <% } %>              
           </div>
         </div>
       </div>

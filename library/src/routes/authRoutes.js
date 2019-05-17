@@ -1,3 +1,4 @@
+/* eslint-disable operator-linebreak */
 const express = require('express');
 const { MongoClient } = require('mongodb');
 const passport = require('passport');
@@ -6,7 +7,6 @@ const debug = require('debug')('app:authRoutes');
 const authRoute = express.Router();
 function router(nav) {
   authRoute.route('/signUp').post((req, res) => {
-    debug(req.body);
     req.login(req.body, () => {
       const { username, password, email, password2 } = req.body;
       const url = 'mongodb://127.0.0.1:27017';
@@ -57,12 +57,24 @@ function router(nav) {
     passport.authenticate('local', {
       successRedirect: '/auth/profile',
       failureRedirect: '/',
+      failureFlash: 'Invalid username or password.',
     }),
+    (req, res) => {
+      if (!req.user) {
+        req.flash('notify', 'Username/Password does not exist!');
+        res.redirect('/');
+      }
+    },
   );
   authRoute
     .route('/profile')
     .all((req, res, next) => {
-      if (req.user) {
+      if (
+        typeof req.user &&
+        req.user &&
+        typeof req.user.username &&
+        req.user.username
+      ) {
         next();
       } else {
         req.flash('notify', 'You are not logged In.');

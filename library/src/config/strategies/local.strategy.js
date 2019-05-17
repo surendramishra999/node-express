@@ -17,12 +17,18 @@ module.exports = function localStrategy() {
         (async function mongo() {
           let client;
           try {
+            if (username === '') {
+              throw new Error("username can't be empty");
+            }
+            if (password === '') {
+              throw new Error("password can't be empty");
+            }
             client = await MongoClient.connect(url, { useNewUrlParser: true });
             debug('connected to db server');
             const db = client.db(dbName);
             const col = db.collection('users');
             const user = await col.findOne({ username });
-            if (user.password === password) {
+            if (user && user.password === password) {
               done(null, user);
             } else {
               done(null, false);

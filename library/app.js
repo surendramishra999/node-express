@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const path = require('path');
+const _ = require('lodash');
 const flash = require('express-flash-messages');
 const engine = require('ejs-mate');
 const logger = require('./logger');
@@ -86,7 +87,13 @@ app.get('/', (req, res) => {
   logger.debug(chalk.yellow('Debug statement'));
   logger.info(chalk.blue('Info statement'));
   // res.sendFile(path.join(__dirname, 'views/index.html'));
-  if (req.user) {
+  /* eslint-disable operator-linebreak */
+  if (
+    typeof req.user &&
+    req.user &&
+    typeof req.user.username &&
+    req.user.username
+  ) {
     res.render('profile', {
       title: 'Library',
       nav,
@@ -96,6 +103,7 @@ app.get('/', (req, res) => {
     res.render('index', {
       title: 'Library',
       nav,
+      error: _.get(req, 'session.flash.error'),
     });
   }
 });
