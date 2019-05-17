@@ -1,4 +1,5 @@
 const express = require('express');
+const _ = require('lodash');
 const database = require('./../../database/mysql');
 
 const bookRouter = express.Router();
@@ -8,7 +9,7 @@ let book = {};
 
 function router(nav) {
   bookRouter.use((req, res, next) => {
-    if (req.user) {
+    if (_.get(req, 'user.username')) {
       next();
     } else {
       req.flash('notify', 'You are not logged In.');

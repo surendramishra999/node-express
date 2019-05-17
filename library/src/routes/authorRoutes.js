@@ -1,4 +1,5 @@
 const express = require('express');
+const _ = require('lodash');
 const { MongoClient, ObjectId } = require('mongodb');
 const debug = require('debug')('app:authorRoute');
 
@@ -8,7 +9,7 @@ let author = {};
 
 function router(nav) {
   authorRouter.use((req, res, next) => {
-    if (req.user) {
+    if (_.get(req, 'user.username')) {
       next();
     } else {
       req.flash('notify', 'You are not logged In.');

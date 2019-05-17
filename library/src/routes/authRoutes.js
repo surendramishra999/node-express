@@ -1,6 +1,7 @@
 /* eslint-disable operator-linebreak */
 const express = require('express');
 const { MongoClient } = require('mongodb');
+const _ = require('lodash');
 const passport = require('passport');
 const debug = require('debug')('app:authRoutes');
 
@@ -60,7 +61,7 @@ function router(nav) {
       failureFlash: 'Invalid username or password.',
     }),
     (req, res) => {
-      if (!req.user) {
+      if (!_.get(req, 'user.username')) {
         req.flash('notify', 'Username/Password does not exist!');
         res.redirect('/');
       }
@@ -69,12 +70,7 @@ function router(nav) {
   authRoute
     .route('/profile')
     .all((req, res, next) => {
-      if (
-        typeof req.user &&
-        req.user &&
-        typeof req.user.username &&
-        req.user.username
-      ) {
+      if (_.get(req, 'user.username')) {
         next();
       } else {
         req.flash('notify', 'You are not logged In.');
@@ -82,7 +78,7 @@ function router(nav) {
       }
     })
     .get((req, res) => {
-      if (req.user) {
+      if (_.get(req, 'user.username')) {
         res.render('profile', {
           title: 'Library',
           nav,
