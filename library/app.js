@@ -2,7 +2,11 @@ const express = require('express');
 const chalk = require('chalk');
 const debug = require('debug')('app');
 const morgan = require('morgan');
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
 const path = require('path');
+const flash = require('express-flash-messages');
 const engine = require('ejs-mate');
 const logger = require('./logger');
 
@@ -15,6 +19,7 @@ const app = express();
 
 const PORT = process.env.PORT || 3000;
 
+app.use(flash());
 app.use(
   morgan('dev', {
     skip(req, res) {
@@ -32,6 +37,11 @@ app.use(
     stream: process.stdout,
   }),
 );
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(session({ secret: 'library' }));
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(
@@ -54,6 +64,8 @@ app.set('views', './src/views');
 app.engine('ejs', engine);
 app.set('view engine', 'ejs');
 
+require('./src/config/passport.js')(app);
+
 const bookRouter = require('./src/routes/bookRoutes')(nav);
 
 app.use('/books', bookRouter);
@@ -66,14 +78,26 @@ const authorRouter = require('./src/routes/authorRoutes')(nav);
 
 app.use('/authors', authorRouter);
 
+const authRouter = require('./src/routes/authRoutes')(nav);
+
+app.use('/auth', authRouter);
+
 app.get('/', (req, res) => {
   logger.debug(chalk.yellow('Debug statement'));
   logger.info(chalk.blue('Info statement'));
   // res.sendFile(path.join(__dirname, 'views/index.html'));
-  res.render('index', {
-    title: 'Library',
-    nav,
-  });
+  if (req.user) {
+    res.render('profile', {
+      title: 'Library',
+      nav,
+      user: req.user,
+    });
+  } else {
+    res.render('index', {
+      title: 'Library',
+      nav,
+    });
+  }
 });
 
 app.use((req, res) => {

@@ -7,7 +7,15 @@ let authors = [];
 let author = {};
 
 function router(nav) {
-  authorRouter.route('/').get((req, res) => {
+  authorRouter.use((req, res, next) => {
+    if (req.user) {
+      next();
+    } else {
+      req.flash('notify', 'You are not logged In.');
+      res.redirect('/');
+    }
+  });
+  authorRouter.route('/').get((req, res, next) => {
     const url = 'mongodb://127.0.0.1:27017';
     const dbName = 'libraryApp';
     // eslint-disable-next-line wrap-iife
@@ -22,15 +30,22 @@ function router(nav) {
           .find()
           .toArray();
         authors = response;
+        res.render('authorListView', {
+          title: 'Authors',
+          nav,
+          authors,
+        });
+        next();
       } catch (err) {
         debug(err.stack);
+        res.render('authorListView', {
+          title: 'Authors',
+          nav,
+          authors,
+        });
+        next();
       }
     })();
-    res.render('authorListView', {
-      title: 'Authors',
-      nav,
-      authors,
-    });
   });
 
   authorRouter

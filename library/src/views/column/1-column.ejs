@@ -94,7 +94,9 @@
       <div class="container">
         <div class="row">
           <div class="col-md-12">
-            <!-- <div class="top-spacer"></div> -->
+              <% const messages = getMessages(); if ( messages.notify) { %>
+                <div class="alert alert-danger"><%= messages.notify %> </div>
+              <% } %>
           </div>
         </div>
       </div>
@@ -105,9 +107,7 @@
       <div class="row">
         <div class="col-md-12">
           <div class="panel">
-            <div class="panel-body">
                 <%- body -%>
-            </div>
           </div>
         </div>
         <!--/col-12-->

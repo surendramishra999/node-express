@@ -7,6 +7,14 @@ let books = [];
 let book = {};
 
 function router(nav) {
+  bookRouter.use((req, res, next) => {
+    if (req.user) {
+      next();
+    } else {
+      req.flash('notify', 'You are not logged In.');
+      res.redirect('/');
+    }
+  });
   bookRouter.route('/').get((req, res) => {
     database()
       .then(conn => {

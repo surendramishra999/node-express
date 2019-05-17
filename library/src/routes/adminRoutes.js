@@ -3,7 +3,7 @@ const { MongoClient } = require('mongodb');
 const debug = require('debug')('app:adminRoute');
 
 const adminRouter = express.Router();
-
+const authors = [];
 function router(nav) {
   adminRouter.route('/').get((req, res) => {
     const url = 'mongodb://127.0.0.1:27017';
