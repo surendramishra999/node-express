@@ -23,7 +23,9 @@
             <span class="label label-default"><%=book.genre%></span>
           </h4>
         </div>
-        <div class="col-xs-9"><%=book.discription %></div>
+        <% if(typeof book.description!=='undefined'){ %>
+        <div class="col-xs-9"><%-book.description %></div>
+        <% } %>
       </div>
       <br /><br />
     </div>

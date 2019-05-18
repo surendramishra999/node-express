@@ -3,7 +3,7 @@ const _ = require('lodash');
 
 const database = require('./../../database/mysql');
 
-function bookController(nav) {
+function bookController(bookService, nav) {
   let connection;
   let books = [];
   let book = {};
@@ -47,10 +47,22 @@ function bookController(nav) {
         connection.end();
         if (resultSet) {
           book = { ...resultSet[0] };
+          // eslint-disable-next-line wrap-iife
+          (async function addDetails() {
+            try {
+              const newbook = await bookService.getBookById(book.id);
+              book.description = newbook.description;
+              book.img = newbook.image_url;
+            } catch (err) {
+              book.description = 'No response found from GoodReads API ';
+              /* eslint-disable no-console */
+              console.info(err);
+            }
+            req.book = book;
+            next();
+            return book;
+          })();
         }
-        req.book = book;
-        next();
-        return book;
       })
       .catch(error => {
         if (connection && connection.end) connection.end();
