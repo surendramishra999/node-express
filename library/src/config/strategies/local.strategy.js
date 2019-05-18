@@ -37,7 +37,9 @@ module.exports = function localStrategy() {
           } catch (err) {
             debug(err.stack);
             done(null, false);
-            client.close();
+            if (client) {
+              client.close();
+            }
           }
         })();
       },
